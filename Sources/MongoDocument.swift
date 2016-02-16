@@ -28,7 +28,7 @@ class MongoDocument {
 
     private let documentData: DocumentData
 
-    init(let data: DocumentData) throws {
+    init(data: DocumentData) throws {
         self.documentData = data
 
         do {
