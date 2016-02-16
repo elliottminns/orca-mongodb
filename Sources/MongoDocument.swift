@@ -95,7 +95,7 @@ class MongoDocument {
 import Foundation
 func == (lhs: MongoDocument, rhs: MongoDocument) -> Bool {
 
-    return (lhs.data as! [String : NSObject]) == (rhs.data as! [String : NSObject])
+    return (lhs.data == rhs.data)
 }
 
 func != (lhs: MongoDocument, rhs: MongoDocument) -> Bool {
