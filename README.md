@@ -31,7 +31,7 @@ brew link --overwrite bson
 
 On Linux, this is a different story. Adding a prebuilt binary is in the roadmap. Currently, follow the instructions found [here](https://github.com/mongodb/mongo-c-driver).
 
-#### Building
+### Building MongoDB
 
 In order to build your project, the swift compiler needs to know where the include files live. This only needs to be done the first time so that it compiles the MongoDB module.
 
