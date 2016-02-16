@@ -11,7 +11,7 @@ import mongocLinux
 #else
 import mongocMac
 #endif
-import Freddy
+import PureJsonSerializer
 
 typealias DocumentData = [String : Any]
 
@@ -40,20 +40,16 @@ import Foundation
 extension String {
 
     func parseJSON() throws -> Any {
-        let data = self.dataUsingEncoding(NSUTF8StringEncoding)!
-		let json = try JSON(data: data)
+        let json = try Json.deserialize(self)
+
 		return json
     }
 
     func parseJSONDocumentData() throws -> DocumentData? {
+
         let parseJson = try parseJSON()
-        print(parseJson)
 
-        //for (key, value) in parseJson {
-        //    print(key)
-        //}
-
-        let documentData = try parseJSON() as? DocumentData
+        let documentData = parseJson as? DocumentData
         print("document data is: \(documentData)")
         return documentData
     }

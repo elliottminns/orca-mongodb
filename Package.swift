@@ -8,7 +8,6 @@ let package = Package(name: "OrcaMongoDB",
             majorVersion: 0),
         .Package(url: "https://github.com/elliottminns/echo.git",
             majorVersion: 0),
-        .Package(url: "https://github.com/bignerdranch/Freddy.git", 
-majorVersion: 2)
-            // .Package(url: "https://github.com/tannernelson/csqlite.git", majorVersion: 0)
+        .Package(url: "https://github.com/gfx/Swift-PureJsonSerializer.git",
+            majorVersion: 1)
     ])
