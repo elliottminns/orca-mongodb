@@ -11,8 +11,9 @@ import mongocLinux
 #else
 import mongocMac
 #endif
+import Freddy
 
-typealias DocumentData = [String : AnyObject]
+typealias DocumentData = [String : Any]
 
 typealias _mongoc_client = COpaquePointer
 typealias _mongoc_database = COpaquePointer
@@ -38,28 +39,35 @@ extension Int {
 import Foundation
 extension String {
 
-    func parseJSON() throws -> AnyObject {
+    func parseJSON() throws -> Any {
         let data = self.dataUsingEncoding(NSUTF8StringEncoding)!
-        let decoded = try NSJSONSerialization.JSONObjectWithData(data, options: [])
-
-        return decoded
+		let json = try JSON(data: data)
+		return json
     }
 
     func parseJSONDocumentData() throws -> DocumentData? {
-        return try parseJSON() as? DocumentData
+        let parseJson = try parseJSON()
+        print(parseJson)
+
+        //for (key, value) in parseJson {
+        //    print(key)
+        //}
+
+        let documentData = try parseJSON() as? DocumentData
+        print("document data is: \(documentData)")
+        return documentData
     }
 }
 
 extension Dictionary where Key: StringLiteralConvertible {
     func toJSON() throws -> String {
-        let data = try NSJSONSerialization.dataWithJSONObject(self as! AnyObject, options: .PrettyPrinted)
-        return String(data: data, encoding: NSUTF8StringEncoding)!
+        
+		return JSONSerializer.serialize(self)
     }
 }
 
 extension Array {
     func toJSON() throws -> String {
-        let data = try NSJSONSerialization.dataWithJSONObject(self as! AnyObject, options: .PrettyPrinted)
-        return String(data: data, encoding: NSUTF8StringEncoding)!
+		return JSONSerializer.serialize(self)
     }
 }

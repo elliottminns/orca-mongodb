@@ -23,7 +23,11 @@ class MongoDocument {
     }
 
     var id: String? {
-        return self.data["_id"]?["$oid"] as? String
+        guard let id = self.data["_id"] as? [String: String] else {
+            return nil
+        }
+
+        return id["$oid"]
     }
 
     private let documentData: DocumentData

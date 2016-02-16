@@ -34,7 +34,9 @@ class MongoBSON {
         }
 
         do {
+            print("uhoh")
             self.data = try json.parseJSONDocumentData()!
+            print("Spag")
         } catch {
             self.data = [:]
             throw error

@@ -15,12 +15,12 @@ public class OrcaMongoDB {
             handler: handler)
     }
 
-    func dataTypeFromDocument(document: [String: AnyObject],
+    func dataTypeFromDocument(document: MongoDocument,
         forSchema schema: [String: DataType.Type]) -> [String: DataType] {
 
             var dataTypes = [String: DataType]()
 
-            for (key, object) in document {
+            for (key, object) in document.data {
 
                 if let schemaType = schema[key] {
                     let value: DataType?
@@ -45,23 +45,21 @@ public class OrcaMongoDB {
                     dataTypes[key] = value
                 }
 
-                let identifier = document["id"]?["oid"] as? String
+                let identifier = document.id
                 dataTypes["identifier"] = identifier
             }
 
             return dataTypes
     }
 
-    func mongoDBDocumentData(data: [String: DataType]) -> [String: AnyObject] {
+    func mongoDBDocumentData(data: [String: DataType]) -> [String: Any] {
         guard let identifier = data["identifier"] as? String else {
             return [:]
         }
-        var converted = [String: AnyObject]()
+        var converted = [String: Any]()
 
         for (key, value) in data {
-            if let v = value as? AnyObject {
-                converted[key] = v
-            }
+            converted[key] = value
         }
 
         converted["_id"] = ["$oid": identifier]
@@ -70,7 +68,7 @@ public class OrcaMongoDB {
     }
 
     func parseFiltersToDocument(filters filters: [Filter]) throws
-        -> [String: AnyObject]  {
+        -> [String: Any]  {
         var identifier: String? = nil
 
         for filter in filters {
@@ -108,7 +106,7 @@ extension OrcaMongoDB: Driver {
                 database: database)
 
             if let document = try collection.findOne(query) {
-                let dataType = dataTypeFromDocument(document.data,
+                let dataType = dataTypeFromDocument(document,
                     forSchema: schema)
                 return dataType
             } else {
@@ -130,7 +128,7 @@ extension OrcaMongoDB: Driver {
 
             var models = [[String: DataType]]()
             for document in documents {
-                let model = dataTypeFromDocument(document.data,
+                let model = dataTypeFromDocument(document,
                     forSchema: schema)
                 models.append(model)
             }
