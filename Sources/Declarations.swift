@@ -13,7 +13,7 @@ import mongocMac
 #endif
 import PureJsonSerializer
 
-typealias DocumentData = [String : Any]
+typealias DocumentData = Json
 
 typealias _mongoc_client = COpaquePointer
 typealias _mongoc_database = COpaquePointer
@@ -39,19 +39,14 @@ extension Int {
 import Foundation
 extension String {
 
-    func parseJSON() throws -> Any {
+    func parseJSON() throws -> Json {
         let json = try Json.deserialize(self)
 
 		return json
     }
 
-    func parseJSONDocumentData() throws -> DocumentData? {
-
-        let parseJson = try parseJSON()
-
-        let documentData = parseJson as? DocumentData
-        print("document data is: \(documentData)")
-        return documentData
+    func parseJSONDocumentData() throws -> [String: Json]? {
+        return try parseJSON().objectValue
     }
 }
 

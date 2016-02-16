@@ -1,4 +1,3 @@
-//
 //  MongoBSON.swift
 //  swiftMongoDB
 //
@@ -12,11 +11,13 @@ import bsonLinux
 import bsonMac
 #endif
 
+import PureJsonSerializer
+
 class MongoBSON {
 
     private var _bson: bson_t
     let json: String
-    let data: DocumentData
+    let data: Json
     var bson: bson_t {
         return bson_copy(&_bson).memory // for safety
     }
@@ -34,9 +35,7 @@ class MongoBSON {
         }
 
         do {
-            print("uhoh")
-            self.data = try json.parseJSONDocumentData()!
-            print("Spag")
+            self.data = try json.parseJSON()
         } catch {
             self.data = [:]
             throw error
@@ -48,7 +47,7 @@ class MongoBSON {
         self.json = json
 
         do {
-            self.data = try self.json.parseJSONDocumentData()!
+            self.data = try self.json.parseJSON()
         } catch {
             self.data = [:]
             self._bson = bson_t()
@@ -68,7 +67,7 @@ class MongoBSON {
         self.data = data
 
         do {
-            self.json = try data.toJSON()
+            self.json = data.serialize()
         } catch {
             self.json = ""
             self._bson = bson_t()

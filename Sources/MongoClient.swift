@@ -99,7 +99,8 @@ class MongoClient {
         var reply = bson_t()
         var error = bson_error_t()
 
-        mongoc_client_command_simple(self.clientRaw, databaseName, &command, nil, &reply, &error)
+        mongoc_client_command_simple(self.clientRaw, databaseName, &command, 
+                                     nil, &reply, &error)
 
         try error.throwIfError()
 

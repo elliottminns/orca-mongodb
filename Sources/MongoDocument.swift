@@ -1,15 +1,18 @@
+import PureJsonSerializer
+
 #if os(Linux)
 import bsonLinux
 #else
 import bsonMac
 #endif
 
+
 class MongoDocument {
 
     let bson: bson_t
 
     var JSON: String? {
-        return try? data.toJSON()
+        return data.serialize()
     }
 
     var dataWithoutObjectId: DocumentData {
@@ -19,20 +22,21 @@ class MongoDocument {
     }
 
     var data: DocumentData {
-        return self.documentData
+        return self.data
     }
 
     var id: String? {
-        guard let id = self.data["_id"] as? [String: String] else {
-            return nil
+        guard let data = self.data.objectValue, 
+            let id = data["$oid"]?.stringValue else {
+                return nil
         }
 
-        return id["$oid"]
+        return id
     }
 
-    private let documentData: DocumentData
+    private let documentData: Json
 
-    init(data: DocumentData) throws {
+    init(data: Json) throws {
         self.documentData = data
 
         do {
@@ -45,16 +49,7 @@ class MongoDocument {
 
     convenience init(JSON: String) throws {
 
-        guard let data = try JSON.parseJSONDocumentData() else {
-            throw MongoError.CorruptDocument
-        }
-
-        try self.init(data: data)
-    }
-
-    convenience init(withSchemaObject object: MongoObject) throws {
-
-        let data = object.properties()
+        let data = try JSON.parseJSON()
 
         try self.init(data: data)
     }
@@ -106,29 +101,3 @@ func != (lhs: DocumentData, rhs: DocumentData) -> Bool {
     return !(lhs == rhs)
 }
 
-func == (lhs: DocumentData, rhs: DocumentData) -> Bool {
-
-    // if they're of different sizes
-    if lhs.count != rhs.count {
-        return false
-    }
-
-
-    // only need to check from one side because they're the same size - if something doesn't match then they aren't equal.
-    // check that rhs contains all of lhs
-    for (lhkey, lhvalue) in lhs {
-
-        let lhval = lhvalue as! NSObject
-
-        // casting into nsobject
-        if let rhval = rhs[lhkey] as? NSObject {
-
-            // if they're not the same, return false
-            if rhval != lhval {
-                return false
-            }
-        }
-    }
-
-    return true
-}

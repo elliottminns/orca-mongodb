@@ -11,6 +11,7 @@ import mongocLinux
 #else
 import mongocMac
 #endif
+import PureJsonSerializer
 
 class MongoCursor {
 
@@ -105,10 +106,12 @@ class MongoCursor {
 
         let documents = try documentsOptional
             .map { doc -> DocumentData in
+
                 guard let doc = doc else {
                     throw MongoError.CorruptDocument
                 }
-                return doc
+
+                return Json(doc)
             }
 
         return documents

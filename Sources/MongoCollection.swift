@@ -59,33 +59,35 @@ class MongoCollection {
         try error.throwIfError()
     }
 
-    func find(query: DocumentData = DocumentData(), flags: QueryFlags = QueryFlags.None, skip: Int = 0, limit: Int = 0, batchSize: Int = 0) throws -> [MongoDocument] {
+    func find(query: DocumentData = .NullValue, 
+        flags: QueryFlags = QueryFlags.None, skip: Int = 0, 
+        limit: Int = 0, batchSize: Int = 0) throws -> [MongoDocument] {
 
-        var query = try MongoBSON(data: query).bson
+            var query = try MongoBSON(data: query).bson
 
-        // standard options - should be customizable later on
-        let cursor = MongoCursor(
-            collection: self,
-            operation: .Find,
-            query: &query,
-            options: (
-                queryFlags: flags.rawFlag,
-                skip: skip,
-                limit: limit,
-                batchSize: batchSize
+            // standard options - should be customizable later on
+            let cursor = MongoCursor(
+                collection: self,
+                operation: .Find,
+                query: &query,
+                options: (
+                    queryFlags: flags.rawFlag,
+                    skip: skip,
+                    limit: limit,
+                    batchSize: batchSize
+                )
             )
-        )
 
-        let documents = try cursor.getDocuments()
+            let documents = try cursor.getDocuments()
+    
+            if cursor.lastError.isError {
+                throw cursor.lastError
+            }
 
-        if cursor.lastError.isError {
-            throw cursor.lastError
-        }
-
-        return documents
+            return documents
     }
 
-    func findOne(query: DocumentData = DocumentData(), flags: QueryFlags = QueryFlags.None, skip: Int = 0, batchSize: Int = 0) throws -> MongoDocument? {
+    func findOne(query: DocumentData = .NullValue, flags: QueryFlags = QueryFlags.None, skip: Int = 0, batchSize: Int = 0) throws -> MongoDocument? {
 
         let doc = try find(query, flags: flags, skip: skip, limit: 1, batchSize: batchSize)
 
@@ -96,30 +98,33 @@ class MongoCollection {
         }
     }
 
-    func update(query: DocumentData = DocumentData(), newValue: DocumentData, flags: UpdateFlags = UpdateFlags.None) throws -> Bool {
+    func update(query: DocumentData = .NullValue, newValue: DocumentData, 
+        flags: UpdateFlags = UpdateFlags.None) throws -> Bool {
 
-        var query = try MongoBSON(data: query).bson
+            var query = try MongoBSON(data: query).bson
 
-        var document = try MongoBSON(data: newValue).bson
+            var document = try MongoBSON(data: newValue).bson
 
-        var error = bson_error_t()
-        let success = mongoc_collection_update(self.collectionRaw, flags.rawFlag, &query, &document, nil, &error)
-        try error.throwIfError()
+            var error = bson_error_t()
+            let success = mongoc_collection_update(self.collectionRaw, flags.rawFlag, &query, &document, nil, &error)
+            try error.throwIfError()
 
-        return success
+            return success
     }
 
 
-    func remove(query: DocumentData = DocumentData(), flags: RemoveFlags = RemoveFlags.None) throws -> Bool {
+    func remove(query: DocumentData = .NullValue, 
+        flags: RemoveFlags = RemoveFlags.None) throws -> Bool {
 
-        var query = try MongoBSON(data: query).bson
+            var query = try MongoBSON(data: query).bson
 
-        var error = bson_error_t()
-        let success = mongoc_collection_remove(self.collectionRaw, flags.rawFlag, &query, nil, &error)
+            var error = bson_error_t()
+            let success = mongoc_collection_remove(self.collectionRaw, 
+                            flags.rawFlag, &query, nil, &error)
 
-        try error.throwIfError()
+            try error.throwIfError()
 
-        return success
+            return success
     }
 
     func save(document: DocumentData) throws -> Bool {

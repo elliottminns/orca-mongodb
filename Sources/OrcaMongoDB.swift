@@ -1,5 +1,23 @@
 import Orca
 import Foundation
+import PureJsonSerializer
+
+extension Json {
+    init(_ dataType: DataType) {
+        switch dataType.dynamicType.valueType {
+        case .Double:
+             self.init(dataType as! Double)            
+        case .Int:
+             self.init(dataType as! Int)            
+        case .Float:
+            self.init(dataType as! Double)            
+        case .String:
+            self.init(dataType as! String)
+        case .Bool:
+            self.init(dataType as! Bool)
+        }
+    }
+}
 
 public class OrcaMongoDB {
 
@@ -15,60 +33,70 @@ public class OrcaMongoDB {
             handler: handler)
     }
 
+    func dataTypeFromJson(json: [String: Json], 
+        forSchema schema: [String: DataType.Type]) -> [String: DataType] {
+            var values = [String: DataType]()
+
+            for (key, value) in json {
+
+                if let object = value.objectValue {
+                    //values += dataTypeFromJson(object)
+                    if let identifier = object["$oid"]?.stringValue {
+                        values[key] = identifier
+                    }
+
+                } else if let type = schema[key] {
+                    let v: DataType?
+
+                    switch type.valueType {
+                    case .Double:
+                        v = value.doubleValue
+                    case .Int:
+                        v = value.intValue
+                    case .Bool:
+                        v = value.boolValue
+                    case .Float:
+                        v = value.floatValue
+                    case .String:
+                        v = value.stringValue
+                    }
+                    values[key] = v
+                }
+            }
+
+            return values
+
+    }
+
     func dataTypeFromDocument(document: MongoDocument,
         forSchema schema: [String: DataType.Type]) -> [String: DataType] {
 
-            var dataTypes = [String: DataType]()
+            guard let data = document.data.objectValue else { return [:] }
 
-            for (key, object) in document.data {
-
-                if let schemaType = schema[key] {
-                    let value: DataType?
-                    switch schemaType.valueType {
-                        case .Double:
-                            let num = object as? NSNumber
-                            value = num?.doubleValue
-                        case .Int:
-                            let num = object as? NSNumber
-                            value = num?.integerValue
-                        case .Bool:
-                            let num = object as? NSNumber
-                            value = num?.boolValue
-                        case .Float:
-                            let num = object as? NSNumber
-                            value = num?.floatValue
-                        case .String:
-                            let string = object as? NSString
-                            value = String(string)
-                    }
-
-                    dataTypes[key] = value
-                }
-
-                let identifier = document.id
-                dataTypes["identifier"] = identifier
-            }
+            let dataTypes = dataTypeFromJson(data, forSchema: schema)
 
             return dataTypes
     }
 
-    func mongoDBDocumentData(data: [String: DataType]) -> [String: Any] {
+    func mongoDBDocumentData(data: [String: DataType]) -> Json {
         guard let identifier = data["identifier"] as? String else {
             return [:]
         }
-        var converted = [String: Any]()
+
+        var converted = [String: Json]()
 
         for (key, value) in data {
-            converted[key] = value
+            converted[key] = Json(value)
         }
 
-        converted["_id"] = ["$oid": identifier]
+        converted["_id"] = Json(["$oid": Json(identifier)])
         converted["identifier"] = nil
-        return converted
+        return Json(converted)
     }
 
     func parseFiltersToDocument(filters filters: [Filter]) throws
-        -> [String: Any]  {
+        -> Json {
+
         var identifier: String? = nil
 
         for filter in filters {
@@ -83,7 +111,7 @@ public class OrcaMongoDB {
             throw DriverError.NotFound
         }
 
-        return ["_id": ["$oid": id]]
+        return Json(["_id": Json(["$oid": Json(id)])])
     }
 }
 
