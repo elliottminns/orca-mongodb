@@ -23,7 +23,7 @@ public class OrcaMongoDB {
 
     let database: MongoDB
 
-    init() {
+    public init() {
         database = MongoDB()
     }
 
