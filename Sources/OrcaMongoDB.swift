@@ -8,7 +8,7 @@ extension Json {
         case .Double:
              self.init(dataType as! Double)            
         case .Int:
-             self.init(dataType as! Int)            
+             self.init(dataType as! Double)            
         case .Float:
             self.init(dataType as! Double)            
         case .String:
