@@ -55,6 +55,7 @@ swift build -Xcc -I/usr/local/opt/libbson/include/libbson-1.0/
 swift build -Xcc -I/usr/local/include/libbson-1.0 -Xlinker -lbson-1.0 -Xlinker -lrt -Xlinker -lmongoc-1.0 && .build/debug/OrcaMongoDB
 ```
 
+
 ## Getting Started
 
 Add Orca-MongoDB to your Package.swift
@@ -95,3 +96,7 @@ let database = Orca(driver: mongo)
 ```
 
 and you're good to go.
+
+## MongoDB
+
+Make sure that you have the MongoDB Daemon running, or else Orca won't be able to conncet. 
