@@ -66,13 +66,7 @@ class MongoBSON {
 
         self.data = data
 
-        do {
-            self.json = data.serialize()
-        } catch {
-            self.json = ""
-            self._bson = bson_t()
-            throw error
-        }
+        self.json = data.serialize()
 
         do {
             self._bson = try MongoBSON.jsonToBson(json)

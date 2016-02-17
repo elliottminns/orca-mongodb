@@ -21,9 +21,7 @@ class MongoDocument {
         return copy
     }
 
-    var data: DocumentData {
-        return self.data
-    }
+    let data: DocumentData
 
     var id: String? {
         guard let data = self.data.objectValue, 
@@ -34,10 +32,8 @@ class MongoDocument {
         return id
     }
 
-    private let documentData: Json
-
     init(data: Json) throws {
-        self.documentData = data
+        self.data = data
 
         do {
             self.bson = try MongoBSON(data: data).bson
