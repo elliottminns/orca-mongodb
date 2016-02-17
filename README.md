@@ -34,7 +34,7 @@ On Linux, this is a different story. Adding a prebuilt binary is in the roadmap.
 ```
 curl -L https://github.com/mongodb/mongo-c-driver/releases/download/1.3.3/mongo-c-driver-1.3.3.tar.gz | tar xz
 cd mongo-c-driver-1.3.3/
-./configure
+./configure --enable-static --disable-shared
 make
 sudo make install
 ```
@@ -52,7 +52,7 @@ swift build -Xcc -I/usr/local/opt/libbson/include/libbson-1.0/
 ### Linux
 
 ```
-swift build -Xcc -I/usr/local/include/libbson-1.0/
+swift build -Xcc -I/usr/local/include/libbson-1.0 -Xlinker -lbson-1.0 -Xlinker -lrt -Xlinker -lmongoc-1.0 && .build/debug/OrcaMongoDB
 ```
 
 ## Getting Started
