@@ -63,13 +63,18 @@ class MongoBSON {
     }
 
     init(data: DocumentData) throws {
-
         self.data = data
-
-        self.json = data.serialize()
+        
+        let json = data.serialize()
+        
+        if json == "null" {
+            self.json = "{}"
+        } else {
+            self.json = json
+        }
 
         do {
-            self._bson = try MongoBSON.jsonToBson(json)
+            self._bson = try MongoBSON.jsonToBson(self.json)
         } catch {
             self._bson = bson_t()
             throw error
@@ -92,7 +97,6 @@ class MongoBSON {
 
         var error = bson_error_t()
         let bson = bson_new_from_json(json, json.nulTerminatedUTF8.count, &error)
-
         try error.throwIfError()
 
         return bson.memory

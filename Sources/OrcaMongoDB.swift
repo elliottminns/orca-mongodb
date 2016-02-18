@@ -152,6 +152,7 @@ extension OrcaMongoDB: Driver {
             let collection = MongoCollection(name: collection,
                 database: database)
 
+
             let documents = try collection.find()
 
             var models = [[String: DataType]]()

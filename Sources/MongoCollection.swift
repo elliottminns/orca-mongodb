@@ -63,7 +63,9 @@ class MongoCollection {
         flags: QueryFlags = QueryFlags.None, skip: Int = 0, 
         limit: Int = 0, batchSize: Int = 0) throws -> [MongoDocument] {
 
+
             var query = try MongoBSON(data: query).bson
+
 
             // standard options - should be customizable later on
             let cursor = MongoCursor(
