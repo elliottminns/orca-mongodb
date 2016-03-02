@@ -58,7 +58,7 @@ extension bson_error_t {
     }
 }
 
-func mongocErrorMessageToString(inout error: _mongoc_error_message) -> String {
+func mongocErrorMessageToString(error: inout _mongoc_error_message) -> String {
     return withUnsafePointer(&error) {
         String.fromCString(UnsafePointer($0))!
     }
