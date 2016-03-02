@@ -5,12 +5,7 @@
 //  Copyright © 2015 Dan Appel. All rights reserved.
 //
 
-#if os(Linux)
-import bsonLinux
-#else
-import bsonMac
-#endif
-
+import CBSON
 import PureJsonSerializer
 
 class MongoBSON {

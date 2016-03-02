@@ -6,11 +6,7 @@
 //  Copyright © 2015 Dan Appel. All rights reserved.
 //
 
-#if os(Linux)
-import mongocLinux
-#else
-import mongocMac
-#endif
+import CMongoC
 import PureJsonSerializer
 
 typealias DocumentData = Json

@@ -1,8 +1,4 @@
-#if os(Linux)
-import bsonLinux
-#else
-import bsonMac
-#endif
+import CBSON
 
 struct MongoError: ErrorType, CustomStringConvertible {
 

@@ -1,11 +1,5 @@
 import PureJsonSerializer
-
-#if os(Linux)
-import bsonLinux
-#else
-import bsonMac
-#endif
-
+import CBSON
 
 class MongoDocument {
 
