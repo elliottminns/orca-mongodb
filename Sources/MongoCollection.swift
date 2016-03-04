@@ -1,3 +1,25 @@
+/*The MIT License (MIT)
+
+Copyright (c) 2015 Dan Appel
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 //
 //  MongoCollection.swift
 //  swiftMongoDB
@@ -5,6 +27,7 @@
 //  Created by Dan Appel on 8/20/15.
 //  Copyright © 2015 Dan Appel. All rights reserved.
 //
+
 
 import CMongoC
 
@@ -55,8 +78,8 @@ class MongoCollection {
         try error.throwIfError()
     }
 
-    func find(query: DocumentData = .NullValue, 
-        flags: QueryFlags = QueryFlags.None, skip: Int = 0, 
+    func find(query: DocumentData = .NullValue,
+        flags: QueryFlags = QueryFlags.None, skip: Int = 0,
         limit: Int = 0, batchSize: Int = 0) throws -> [MongoDocument] {
 
 
@@ -77,7 +100,7 @@ class MongoCollection {
             )
 
             let documents = try cursor.getDocuments()
-    
+
             if cursor.lastError.isError {
                 throw cursor.lastError
             }
@@ -96,7 +119,7 @@ class MongoCollection {
         }
     }
 
-    func update(query: DocumentData = .NullValue, newValue: DocumentData, 
+    func update(query: DocumentData = .NullValue, newValue: DocumentData,
         flags: UpdateFlags = UpdateFlags.None) throws -> Bool {
 
             var query = try MongoBSON(data: query).bson
@@ -111,13 +134,13 @@ class MongoCollection {
     }
 
 
-    func remove(query: DocumentData = .NullValue, 
+    func remove(query: DocumentData = .NullValue,
         flags: RemoveFlags = RemoveFlags.None) throws -> Bool {
 
             var query = try MongoBSON(data: query).bson
 
             var error = bson_error_t()
-            let success = mongoc_collection_remove(self.collectionRaw, 
+            let success = mongoc_collection_remove(self.collectionRaw,
                             flags.rawFlag, &query, nil, &error)
 
             try error.throwIfError()

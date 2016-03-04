@@ -6,11 +6,11 @@ extension Json {
     init(_ dataType: DataType) {
         switch dataType.dynamicType.valueType {
         case .Double:
-             self.init(dataType as! Double)            
+             self.init(dataType as! Double)
         case .Int:
              self.init(Double(dataType as! Int))
         case .Float:
-            self.init(dataType as! Double)            
+            self.init(dataType as! Double)
         case .String:
             self.init(dataType as! String)
         case .Bool:
@@ -33,7 +33,7 @@ public class OrcaMongoDB {
             handler: handler)
     }
 
-    func dataTypeFromJson(json: [String: Json], 
+    func dataTypeFromJson(json: [String: Json],
         forSchema schema: [String: DataType.Type]) -> [String: DataType] {
             var values = [String: DataType]()
 
