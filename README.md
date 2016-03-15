@@ -99,4 +99,4 @@ and you're good to go.
 
 ## MongoDB
 
-Make sure that you have the MongoDB Daemon running, or else Orca won't be able to conncet. 
+Make sure that you have the MongoDB Daemon running, or else Orca won't be able to connect. 
