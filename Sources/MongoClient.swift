@@ -103,7 +103,7 @@ class MongoClient {
         try error.throwIfError()
         let names = namesRaw.sequence()!
             .map { (cStr: UnsafeMutablePointer<Int8>) -> String? in
-                return String(UTF8String: cStr)
+                return String(utf8String: cStr)
             }
             .flatMap { $0 }
 

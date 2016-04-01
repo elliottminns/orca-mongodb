@@ -33,13 +33,13 @@ import PureJsonSerializer
 
 typealias DocumentData = Json
 
-typealias _mongoc_client = COpaquePointer
-typealias _mongoc_database = COpaquePointer
-typealias _mongoc_collection = COpaquePointer
-typealias _mongoc_cursor = COpaquePointer
-typealias _mongoc_read_prefs = COpaquePointer
-typealias _mongoc_gridfs = COpaquePointer
-typealias _bson_context = COpaquePointer
+typealias _mongoc_client = OpaquePointer
+typealias _mongoc_database = OpaquePointer
+typealias _mongoc_collection = OpaquePointer
+typealias _mongoc_cursor = OpaquePointer
+typealias _mongoc_read_prefs = OpaquePointer
+typealias _mongoc_gridfs = OpaquePointer
+typealias _bson_context = OpaquePointer
 
 typealias _bson_ptr_mutable = UnsafeMutablePointer<bson_t>
 typealias _bson_ptr_immutable = UnsafePointer<bson_t>

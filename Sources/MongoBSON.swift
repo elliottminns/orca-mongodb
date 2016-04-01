@@ -36,7 +36,7 @@ class MongoBSON {
     let json: String
     let data: Json
     var bson: bson_t {
-        return bson_copy(&_bson).memory // for safety
+        return bson_copy(&_bson).pointee// for safety
     }
 
     init(bson: bson_t) throws {
@@ -107,7 +107,7 @@ class MongoBSON {
             throw MongoError.CorruptDocument
         }
 
-        return String(UTF8String: jsonRaw)!
+        return String(utf8String: jsonRaw)!
     }
 
     static func jsonToBson(json: String) throws -> bson_t {
@@ -116,7 +116,7 @@ class MongoBSON {
         let bson = bson_new_from_json(json, json.nulTerminatedUTF8.count, &error)
         try error.throwIfError()
 
-        return bson.memory
+        return bson.pointee
     }
 
     func copyTo(out: _bson_ptr_mutable) {

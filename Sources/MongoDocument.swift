@@ -72,7 +72,7 @@ class MongoDocument {
         bson_oid_init(&oidRAW, nil)
 
 
-        let oidStrRAW = UnsafeMutablePointer<Int8>.alloc(100)
+        let oidStrRAW = UnsafeMutablePointer<Int8>(allocatingCapacity: 100)
 //        try to minimize this memory usage while retaining safety, reference:
 //        4 bytes : The UNIX timestamp in big-endian format.
 //        3 bytes : The first 3 bytes of MD5(hostname).
@@ -82,9 +82,9 @@ class MongoDocument {
 
         bson_oid_to_string(&oidRAW, oidStrRAW)
 
-        let oidStr = String(UTF8String: oidStrRAW)
+        let oidStr = String(utf8String: oidStrRAW)
 
-        oidStrRAW.destroy()
+        oidStrRAW.deinitialize(count: 100)
 
         return oidStr!
     }

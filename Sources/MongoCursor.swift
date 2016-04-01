@@ -90,7 +90,7 @@ class MongoCursor {
         let isOk = mongoc_cursor_next(cursor, &bsonPtr)
 
         if isOk {
-            self.nextBson = bsonPtr.memory
+            self.nextBson = bsonPtr.pointee
         }
 
         return isOk

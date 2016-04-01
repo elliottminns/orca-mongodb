@@ -7,9 +7,9 @@ class MongoDB {
     var database: MongoDatabase?
 
     func connect(host host: String, port: Int, database: String,
-        handler: (error: ErrorType?) -> ()) {
+        handler: (error: ErrorProtocol?) -> ()) {
 
-            let error: ErrorType?
+            let error: ErrorProtocol?
 
             do {
                 self.client = try MongoClient(host: "localhost", port: 27017)

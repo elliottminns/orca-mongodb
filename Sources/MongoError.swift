@@ -22,7 +22,7 @@ SOFTWARE.
 */
 import CBSON
 
-struct MongoError: ErrorType, CustomStringConvertible {
+struct MongoError: ErrorProtocol, CustomStringConvertible {
 
     let description: String
     let code: Int
@@ -78,7 +78,7 @@ extension bson_error_t {
 
 func mongocErrorMessageToString(error: inout _mongoc_error_message) -> String {
     return withUnsafePointer(&error) {
-        String.fromCString(UnsafePointer($0))!
+        String(cString: UnsafePointer($0))
     }
 }
 

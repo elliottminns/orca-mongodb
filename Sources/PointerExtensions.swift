@@ -29,20 +29,20 @@ struct UnsafeMutablePointerSequence {
     var pointer: Pointer
 }
 
-extension UnsafeMutablePointerSequence: SequenceType {
+extension UnsafeMutablePointerSequence: Sequence {
     func generate() -> UnsafeMutablePointerSequence {
         return UnsafeMutablePointerSequence(pointer: pointer)
     }
 }
-extension UnsafeMutablePointerSequence: GeneratorType {
+extension UnsafeMutablePointerSequence: IteratorProtocol {
     mutating func next() -> Element? {
-        defer { pointer = pointer.advancedBy(1) }
+        defer { pointer = pointer.advanced(by: 1) }
 
-        if pointer.memory == nil {
+        if pointer.pointee == nil {
             return nil
         }
 
-        return pointer.memory
+        return pointer.pointee
     }
 }
 
@@ -53,10 +53,10 @@ extension UnsafeMutablePointer: UnsafeMutablePointerType {}
 
 // constrains memory memory to UnsafeMutablePointer
 // ie: UnsafeMutablePointer<UnsafeMutablePointer<T>>
-extension UnsafeMutablePointer where Memory: UnsafeMutablePointerType {
+extension UnsafeMutablePointer where Pointee: UnsafeMutablePointerType {
     func sequence() -> UnsafeMutablePointerSequence? {
 
-        switch memory {
+        switch pointee {
         case is UnsafeMutablePointer<Int8>:
             let ptr = UnsafeMutablePointer<UnsafeMutablePointer<Int8>>(self)
             return UnsafeMutablePointerSequence(pointer: ptr)

@@ -28,7 +28,7 @@ public class OrcaMongoDB {
     }
 
     public func connect(host host: String, port: Int, database: String,
-        handler: (error: ErrorType?) -> ()) {
+        handler: (error: ErrorProtocol?) -> ()) {
         self.database.connect(host: host, port: port, database: database,
             handler: handler)
     }
