@@ -1,12 +1,12 @@
 import Echo
 import Foundation
 
-class MongoDB {
+public class MongoDB {
 
     var client: MongoClient?
     var database: MongoDatabase?
 
-    func connect(host host: String, port: Int, database: String,
+    public func connect(host host: String, port: Int, database: String,
         handler: (error: ErrorProtocol?) -> ()) {
 
             let error: ErrorProtocol?
