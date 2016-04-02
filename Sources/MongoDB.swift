@@ -4,7 +4,11 @@ import Foundation
 public class MongoDB {
 
     var client: MongoClient?
-    var database: MongoDatabase?
+    public var database: MongoDatabase?
+
+    public init() {
+
+    }
 
     public func connect(host host: String, port: Int, database: String,
         handler: (error: ErrorProtocol?) -> ()) {

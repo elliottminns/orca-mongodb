@@ -31,14 +31,14 @@ SOFTWARE.
 
 import CMongoC
 
-class MongoCollection {
+public class MongoCollection {
 
     let name: String
     let databaseName: String
 
     let collectionRaw: _mongoc_collection
 
-    convenience init(name: String, database: MongoDatabase) {
+    public convenience init(name: String, database: MongoDatabase) {
 
         let ptr = mongoc_database_get_collection(database.databaseRaw, name)
         self.init(name: name, databaseName: database.name, ptr: ptr)
@@ -55,7 +55,7 @@ class MongoCollection {
         mongoc_collection_destroy(self.collectionRaw)
     }
 
-    func insert(document: MongoDocument, flags: InsertFlags = InsertFlags.None) throws {
+    public func insert(document: MongoDocument, flags: InsertFlags = InsertFlags.None) throws {
 
         var document = try MongoBSON(data: document.data).bson
 
@@ -78,7 +78,7 @@ class MongoCollection {
         try error.throwIfError()
     }
 
-    func find(query: DocumentData = .NullValue,
+    public func find(query: DocumentData = .NullValue,
         flags: QueryFlags = QueryFlags.None, skip: Int = 0,
         limit: Int = 0, batchSize: Int = 0) throws -> [MongoDocument] {
 
@@ -108,7 +108,7 @@ class MongoCollection {
             return documents
     }
 
-    func findOne(query: DocumentData = .NullValue, flags: QueryFlags = QueryFlags.None, skip: Int = 0, batchSize: Int = 0) throws -> MongoDocument? {
+    public func findOne(query: DocumentData = .NullValue, flags: QueryFlags = QueryFlags.None, skip: Int = 0, batchSize: Int = 0) throws -> MongoDocument? {
 
         let doc = try find(query, flags: flags, skip: skip, limit: 1, batchSize: batchSize)
 
@@ -119,7 +119,7 @@ class MongoCollection {
         }
     }
 
-    func update(query: DocumentData = .NullValue, newValue: DocumentData,
+    public func update(query: DocumentData = .NullValue, newValue: DocumentData,
         flags: UpdateFlags = UpdateFlags.None) throws -> Bool {
 
             var query = try MongoBSON(data: query).bson
@@ -134,7 +134,7 @@ class MongoCollection {
     }
 
 
-    func remove(query: DocumentData = .NullValue,
+    public func remove(query: DocumentData = .NullValue,
         flags: RemoveFlags = RemoveFlags.None) throws -> Bool {
 
             var query = try MongoBSON(data: query).bson
@@ -148,7 +148,7 @@ class MongoCollection {
             return success
     }
 
-    func save(document: DocumentData) throws -> Bool {
+    public func save(document: DocumentData) throws -> Bool {
 
         var document = try MongoBSON(data: document).bson
         var error = bson_error_t()
@@ -235,7 +235,7 @@ class MongoCollection {
         return try MongoBSON(bson: reply).data
     }
 
-    func validate(options: DocumentData) throws -> DocumentData {
+    public func validate(options: DocumentData) throws -> DocumentData {
         var options = try MongoBSON(data: options).bson
 
         var reply = bson_t()

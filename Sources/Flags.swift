@@ -32,7 +32,7 @@ import CMongoC
 
 typealias QueryOptions = (skip: Int, limit: Int, batchSize: Int)
 
-enum QueryFlags {
+public enum QueryFlags {
     case None
     case TailableCursor
     case SlaveOK
@@ -59,7 +59,7 @@ enum QueryFlags {
 }
 
 
-enum InsertFlags {
+public enum InsertFlags {
     case None
     case ContinueOnError
 
@@ -71,7 +71,7 @@ enum InsertFlags {
     }
 }
 
-enum UpdateFlags {
+public enum UpdateFlags {
     case None
     case Upsert
     case MultiUpdate
@@ -85,7 +85,7 @@ enum UpdateFlags {
     }
 }
 
-enum RemoveFlags {
+public enum RemoveFlags {
     case None
     case SingleRemove
 

@@ -30,7 +30,7 @@ SOFTWARE.
 
 import CMongoC
 
-class MongoDatabase {
+public class MongoDatabase {
 
     let databaseRaw: _mongoc_database
 

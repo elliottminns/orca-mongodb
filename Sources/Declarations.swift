@@ -31,7 +31,7 @@ SOFTWARE.
 import CMongoC
 import PureJsonSerializer
 
-typealias DocumentData = Json
+public typealias DocumentData = Json
 
 typealias _mongoc_client = OpaquePointer
 typealias _mongoc_database = OpaquePointer

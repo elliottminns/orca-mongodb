@@ -23,11 +23,11 @@ SOFTWARE.
 import PureJsonSerializer
 import CBSON
 
-class MongoDocument {
+public class MongoDocument {
 
     let bson: bson_t
 
-    var JSON: String? {
+    public var JSON: String? {
         return data.serialize()
     }
 
@@ -37,7 +37,7 @@ class MongoDocument {
         return copy
     }
 
-    let data: DocumentData
+    public let data: DocumentData
 
     var id: String? {
         guard let data = self.data.objectValue,
@@ -48,7 +48,7 @@ class MongoDocument {
         return id
     }
 
-    init(data: Json) throws {
+    public init(data: Json) throws {
         self.data = data
 
         do {
@@ -59,14 +59,14 @@ class MongoDocument {
         }
     }
 
-    convenience init(JSON: String) throws {
+    public convenience init(JSON: String) throws {
 
         let data = try JSON.parseJSON()
 
         try self.init(data: data)
     }
 
-    static func generateObjectId() -> String {
+    public static func generateObjectId() -> String {
         var oidRAW = bson_oid_t()
 
         bson_oid_init(&oidRAW, nil)
