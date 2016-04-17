@@ -24,7 +24,7 @@ SOFTWARE.
 struct UnsafeMutablePointerSequence {
 
     typealias Pointer = UnsafeMutablePointer<Element>
-    typealias Element = UnsafeMutablePointer<Int8>
+    typealias Element = Optional<UnsafeMutablePointer<Int8>>
 
     var pointer: Pointer
 }
@@ -42,6 +42,15 @@ extension UnsafeMutablePointerSequence: IteratorProtocol {
     }
 }
 
+protocol OptionalPointerType {}
+
+extension Optional: OptionalPointerType {
+    func unwrappedType() -> Wrapped? {
+        return self.flatMap {
+            return $0
+        }
+    }
+}
 
 protocol UnsafeMutablePointerType {}
 extension UnsafeMutablePointer: UnsafeMutablePointerType {}
@@ -49,14 +58,13 @@ extension UnsafeMutablePointer: UnsafeMutablePointerType {}
 
 // constrains memory memory to UnsafeMutablePointer
 // ie: UnsafeMutablePointer<UnsafeMutablePointer<T>>
-extension UnsafeMutablePointer where Pointee: UnsafeMutablePointerType {
+extension UnsafeMutablePointer where Pointee: OptionalPointerType {
     func sequence() -> UnsafeMutablePointerSequence? {
 
         switch pointee {
         case is UnsafeMutablePointer<Int8>:
-            let ptr = UnsafeMutablePointer<UnsafeMutablePointer<Int8>>(self)
+            let ptr = UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>(self)
             return UnsafeMutablePointerSequence(pointer: ptr)
-
         default:
             return nil
         }

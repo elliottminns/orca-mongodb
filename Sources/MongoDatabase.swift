@@ -176,9 +176,13 @@ public class MongoDatabase {
 
         try error.throwIfError()
 
-        let names = namesRaw.sequence()!
-            .map { String(utf8String: $0) }
-            .flatMap { $0 }
+        let names: [String] = namesRaw.sequence()!.map { 
+                if let string = $0 {
+                    return String(utf8String: string)
+                } else {
+                    return nil
+                }
+            }.flatMap { return $0 }
 
         return names
     }

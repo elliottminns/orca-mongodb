@@ -101,9 +101,14 @@ class MongoClient {
         let namesRaw = mongoc_client_get_database_names(self.clientRaw, &error)
 
         try error.throwIfError()
-        let names = namesRaw.sequence()!
-            .map { (cStr: UnsafeMutablePointer<Int8>) -> String? in
-                return String(utf8String: cStr)
+        let names: [String] = namesRaw.sequence()!
+            .map {
+                if let s = $0 {
+                    return String(utf8String: s)    
+                } else {
+                    return nil
+                }
+                
             }
             .flatMap { $0 }
 
