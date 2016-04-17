@@ -85,11 +85,11 @@ class MongoCursor {
     /// Advances the cursor to the next document and returns whether it was successful.
     var nextIsOK: Bool {
 
-        var bsonPtr: UnsafePointer<bson_t> = nil
+        var bsonPtr: UnsafePointer<bson_t>? = nil
 
         let isOk = mongoc_cursor_next(cursor, &bsonPtr)
 
-        if isOk {
+        if let bsonPtr = bsonPtr where isOk {
             self.nextBson = bsonPtr.pointee
         }
 

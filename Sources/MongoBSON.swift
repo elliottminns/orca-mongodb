@@ -98,7 +98,7 @@ class MongoBSON {
         }
     }
 
-    static func bsonToJson(bson: bson_t) throws -> String {
+    static func bsonToJson(_ bson: bson_t) throws -> String {
 
         var bson = bson
         let jsonRaw = bson_as_json(&bson, nil)
@@ -110,7 +110,7 @@ class MongoBSON {
         return String(utf8String: jsonRaw)!
     }
 
-    static func jsonToBson(json: String) throws -> bson_t {
+    static func jsonToBson(_ json: String) throws -> bson_t {
 
         var error = bson_error_t()
         let bson = bson_new_from_json(json, json.nulTerminatedUTF8.count, &error)
@@ -119,7 +119,7 @@ class MongoBSON {
         return bson.pointee
     }
 
-    func copyTo(out: _bson_ptr_mutable) {
+    func copyTo(_ out: _bson_ptr_mutable) {
         var bson = self.bson
         bson_copy_to(&bson, out)
     }

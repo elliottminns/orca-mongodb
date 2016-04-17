@@ -55,7 +55,8 @@ public class MongoCollection {
         mongoc_collection_destroy(self.collectionRaw)
     }
 
-    public func insert(document: MongoDocument, flags: InsertFlags = InsertFlags.None) throws {
+    public func insert(_ document: MongoDocument, 
+                       flags: InsertFlags = InsertFlags.None) throws {
 
         var document = try MongoBSON(data: document.data).bson
 
@@ -66,19 +67,19 @@ public class MongoCollection {
         try error.throwIfError()
     }
 
-    func insert(document: DocumentData, flags: InsertFlags = InsertFlags.None) throws {
+    func insert(_ document: DocumentData, flags: InsertFlags = InsertFlags.None) throws {
 
         try self.insert(MongoDocument(data: document), flags: flags)
     }
 
-    func renameCollectionTo(newName : String) throws {
+    func renameCollectionTo(_ newName : String) throws {
         var error = bson_error_t()
         mongoc_collection_rename(self.collectionRaw, databaseName, newName, false, &error)
 
         try error.throwIfError()
     }
 
-    public func find(query: DocumentData = .NullValue,
+    public func find(_ query: DocumentData = .NullValue,
         flags: QueryFlags = QueryFlags.None, skip: Int = 0,
         limit: Int = 0, batchSize: Int = 0) throws -> [MongoDocument] {
 
@@ -108,7 +109,7 @@ public class MongoCollection {
             return documents
     }
 
-    public func findOne(query: DocumentData = .NullValue, flags: QueryFlags = QueryFlags.None, skip: Int = 0, batchSize: Int = 0) throws -> MongoDocument? {
+    public func findOne(_ query: DocumentData = .NullValue, flags: QueryFlags = QueryFlags.None, skip: Int = 0, batchSize: Int = 0) throws -> MongoDocument? {
 
         let doc = try find(query, flags: flags, skip: skip, limit: 1, batchSize: batchSize)
 
@@ -119,7 +120,7 @@ public class MongoCollection {
         }
     }
 
-    public func update(query: DocumentData = .NullValue, newValue: DocumentData,
+    public func update(_ query: DocumentData = .NullValue, newValue: DocumentData,
         flags: UpdateFlags = UpdateFlags.None) throws -> Bool {
 
             var query = try MongoBSON(data: query).bson
@@ -134,7 +135,7 @@ public class MongoCollection {
     }
 
 
-    public func remove(query: DocumentData = .NullValue,
+    public func remove(_ query: DocumentData = .NullValue,
         flags: RemoveFlags = RemoveFlags.None) throws -> Bool {
 
             var query = try MongoBSON(data: query).bson
@@ -148,7 +149,7 @@ public class MongoCollection {
             return success
     }
 
-    public func save(document: DocumentData) throws -> Bool {
+    public func save(_ document: DocumentData) throws -> Bool {
 
         var document = try MongoBSON(data: document).bson
         var error = bson_error_t()
@@ -160,7 +161,7 @@ public class MongoCollection {
         return success
     }
 
-    func performBasicCollectionCommand(command: DocumentData) throws -> DocumentData {
+    func performBasicCollectionCommand(_ command: DocumentData) throws -> DocumentData {
 
         var command = try MongoBSON(data: command).bson
 
@@ -178,23 +179,30 @@ public class MongoCollection {
         mongoc_collection_destroy(collectionRaw)
     }
 
-    func performCommand(command: DocumentData, flags: QueryFlags, options: QueryOptions, fields: [String]) throws -> MongoCursor {
+    func performCommand(_ command: DocumentData, flags: QueryFlags, options: QueryOptions, fields: [String]) throws -> MongoCursor {
 
         var command = try MongoBSON(data: command).bson
         var fields = try MongoBSON(json: fields.toJSON()).bson
 
-        let cursor = mongoc_collection_command(collectionRaw, flags.rawFlag, options.skip.UInt32Value, options.limit.UInt32Value, options.batchSize.UInt32Value, &command, &fields, nil)
+        let cursor = mongoc_collection_command(collectionRaw, flags.rawFlag, 
+                                               options.skip.UInt32Value, 
+                                               options.limit.UInt32Value, 
+                                               options.batchSize.UInt32Value, 
+                                               &command, &fields, nil)
 
         return MongoCursor(cursor: cursor)
     }
 
-    func count(query: DocumentData, flags: QueryFlags, skip: Int, limit: Int) throws -> Int {
+    func count(_ query: DocumentData, flags: QueryFlags, skip: Int, 
+               limit: Int) throws -> Int {
 
         var query = try MongoBSON(data: query).bson
 
         var error = bson_error_t()
 
-        let count = mongoc_collection_count(collectionRaw, flags.rawFlag, &query, Int64(skip), Int64(limit), nil, &error)
+        let count = mongoc_collection_count(collectionRaw, flags.rawFlag, 
+                                            &query, Int64(skip), 
+                                            Int64(limit), nil, &error)
 
         try error.throwIfError()
 
@@ -210,18 +218,21 @@ public class MongoCollection {
         try error.throwIfError()
     }
 
-    func rename(newDatabase: String, newCollection: String, dropBeforeRename: Bool) throws -> Bool {
+    func rename(_ newDatabase: String, newCollection: String, 
+                dropBeforeRename: Bool) throws -> Bool {
 
         var error = bson_error_t()
 
-        let success = mongoc_collection_rename(collectionRaw, newDatabase, newCollection, dropBeforeRename, &error)
+        let success = mongoc_collection_rename(collectionRaw, newDatabase, 
+                                               newCollection, 
+                                               dropBeforeRename, &error)
 
         try error.throwIfError()
 
         return success
     }
 
-    func stats(options: DocumentData) throws -> DocumentData {
+    func stats(_ options: DocumentData) throws -> DocumentData {
 
         var options = try MongoBSON(data: options).bson
 
@@ -235,7 +246,7 @@ public class MongoCollection {
         return try MongoBSON(bson: reply).data
     }
 
-    public func validate(options: DocumentData) throws -> DocumentData {
+    public func validate(_ options: DocumentData) throws -> DocumentData {
         var options = try MongoBSON(data: options).bson
 
         var reply = bson_t()

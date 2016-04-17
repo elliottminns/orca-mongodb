@@ -110,7 +110,7 @@ class MongoClient {
         return names
     }
 
-    func performBasicClientCommand(command: DocumentData, databaseName: String) throws -> DocumentData {
+    func performBasicClientCommand(_ command: DocumentData, databaseName: String) throws -> DocumentData {
 
         var command = try MongoBSON(data: command).bson
 
@@ -125,7 +125,7 @@ class MongoClient {
         return try MongoBSON(bson: reply).data
     }
 
-    func performClientCommand(query: DocumentData, database: MongoDatabase, fields: [String], flags: QueryFlags, options: QueryOptions) throws -> MongoCursor {
+    func performClientCommand(_ query: DocumentData, database: MongoDatabase, fields: [String], flags: QueryFlags, options: QueryOptions) throws -> MongoCursor {
 
         var query = try MongoBSON(data: query).bson
         var fields = try MongoBSON(json: fields.toJSON()).bson

@@ -2,7 +2,7 @@ import Foundation
 
 class JSONSerializer {
 
-    class func serialize(object: Any) -> String {
+    class func serialize(_ object: Any) -> String {
 
         if let dict = object as? [String: Any] {
             var s = "{"

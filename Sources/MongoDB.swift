@@ -10,7 +10,7 @@ public class MongoDB {
 
     }
 
-    public func connect(host host: String, port: Int, database: String,
+    public func connect(host: String, port: Int, database: String,
         handler: (error: ErrorProtocol?) -> ()) {
 
             let error: ErrorProtocol?

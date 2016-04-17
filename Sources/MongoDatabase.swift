@@ -47,7 +47,7 @@ public class MongoDatabase {
         return String(utf8String: nameRaw)!
     }
 
-    func removeUser(username: String) throws -> Bool {
+    func removeUser(_ username: String) throws -> Bool {
         var error = bson_error_t()
         let successful = mongoc_database_remove_user(databaseRaw, username, &error)
 
@@ -65,7 +65,7 @@ public class MongoDatabase {
         return successful
     }
 
-    func addUser(username username: String, password: String, roles: [String], customData: DocumentData) throws -> Bool {
+    func addUser(username: String, password: String, roles: [String], customData: DocumentData) throws -> Bool {
 
         var error = bson_error_t()
 
@@ -144,7 +144,7 @@ public class MongoDatabase {
 //
 //    }
 
-    func findCollections(filter filter: DocumentData) throws -> MongoCursor {
+    func findCollections(filter: DocumentData) throws -> MongoCursor {
 
         var error = bson_error_t()
         var filterRaw = try MongoBSON(data: filter).bson
@@ -158,7 +158,7 @@ public class MongoDatabase {
         return cursor
     }
 
-    func getCollection(name: String) -> MongoCollection {
+    func getCollection(_ name: String) -> MongoCollection {
 
 
         let collectionRaw = mongoc_database_get_collection(databaseRaw, name)
@@ -183,7 +183,7 @@ public class MongoDatabase {
         return names
     }
 
-    func performBasicDatabaseCommand(command: DocumentData) throws -> DocumentData {
+    func performBasicDatabaseCommand(_ command: DocumentData) throws -> DocumentData {
 
         var command = try MongoBSON(data: command).bson
 

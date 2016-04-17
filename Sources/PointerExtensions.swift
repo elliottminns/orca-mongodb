@@ -38,10 +38,6 @@ extension UnsafeMutablePointerSequence: IteratorProtocol {
     mutating func next() -> Element? {
         defer { pointer = pointer.advanced(by: 1) }
 
-        if pointer.pointee == nil {
-            return nil
-        }
-
         return pointer.pointee
     }
 }
