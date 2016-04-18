@@ -31,6 +31,19 @@ public class MongoDB {
     }
 
     public func connect(uri: String, callback: (error: ErrorProtocol?) -> ()) {
-    
+        let error: ErrorProtocol?
+
+        do {
+            self.client = try MongoClient(uri: uri)
+            if let client = self.client, dbName = client.getDatabaseName() {
+                self.database = MongoDatabase(client: client,
+                    name: dbName)
+            }
+            error = nil
+        } catch let err {
+            error = err
+        }
+
+        callback(error: error)
     }
 }

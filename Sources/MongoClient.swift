@@ -90,6 +90,11 @@ class MongoClient {
         try checkConnection()
     }
 
+    func getDatabaseName() -> String? {
+        return self.clientURI.components(separatedBy: "/")
+                .last?.components(separatedBy: "?").first
+    }
+
     /**
      Attempts to run the `ping` command on the database. If it executes without throwing errors, you are successfully connected.
 
