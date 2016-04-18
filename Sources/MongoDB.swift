@@ -29,4 +29,8 @@ public class MongoDB {
 
             handler(error: error)
     }
+
+    public func connect(uri: String, callback: (error: ErrorProtocol?) -> ()) {
+    
+    }
 }

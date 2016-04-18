@@ -64,6 +64,15 @@ class MongoClient {
         )
     }
 
+    init(uri: String) throws {
+        self.host = ""
+        self.port = 1000
+        mongoc_init()
+        self.clientURI = uri
+        self.clientRaw = mongoc_client_new(uri)
+        try checkConnection()
+    }
+
     // authenticated connection - required specific database and specific database for authentication
     init(host: String, port: Int, database: String, authenticationDatabase: String, usernameAndPassword: (username: String, password: String)) throws {
 
