@@ -34,6 +34,11 @@ public class MongoDatabase {
 
     let databaseRaw: _mongoc_database
 
+    public var name: String {
+        let nameRaw = mongoc_database_get_name(databaseRaw)
+        return String(utf8String: nameRaw)!
+    }
+
     init(client: MongoClient, name: String) {
         self.databaseRaw = mongoc_client_get_database(client.clientRaw, name)
     }
@@ -42,12 +47,7 @@ public class MongoDatabase {
     //     self.databaseRaw = mongoc_client_get_default_database(client.clientRaw)
     // }
 
-    var name: String {
-        let nameRaw = mongoc_database_get_name(databaseRaw)
-        return String(utf8String: nameRaw)!
-    }
-
-    func removeUser(_ username: String) throws -> Bool {
+    public func removeUser(_ username: String) throws -> Bool {
         var error = bson_error_t()
         let successful = mongoc_database_remove_user(databaseRaw, username, &error)
 
@@ -56,7 +56,7 @@ public class MongoDatabase {
         return successful
     }
 
-    func removeAllUsers() throws -> Bool {
+    public func removeAllUsers() throws -> Bool {
         var error = bson_error_t()
         let successful = mongoc_database_remove_all_users(databaseRaw, &error)
 
@@ -65,7 +65,7 @@ public class MongoDatabase {
         return successful
     }
 
-    func addUser(username: String, password: String, roles: [String], customData: DocumentData) throws -> Bool {
+    public func addUser(username: String, password: String, roles: [String], customData: DocumentData) throws -> Bool {
 
         var error = bson_error_t()
 
@@ -79,7 +79,7 @@ public class MongoDatabase {
         return successful
     }
 
-    func command(command: DocumentData, flags: QueryFlags = .None, skip: Int = 0, limit: Int = 0, batchSize: Int = 0, fields: [String] = []) throws -> MongoCursor {
+    public func command(command: DocumentData, flags: QueryFlags = .None, skip: Int = 0, limit: Int = 0, batchSize: Int = 0, fields: [String] = []) throws -> MongoCursor {
 
         var commandRaw = try MongoBSON(data: command).bson
         var fieldsRaw = try MongoBSON(json: fields.toJSON()).bson
@@ -91,7 +91,7 @@ public class MongoDatabase {
         return cursor
     }
 
-    func drop() throws -> Bool {
+    public func drop() throws -> Bool {
 
         var error = bson_error_t()
 
@@ -102,7 +102,7 @@ public class MongoDatabase {
         return successful
     }
 
-    func hasCollection(name: String) throws -> Bool {
+    public func hasCollection(_ name: String) throws -> Bool {
 
         var error = bson_error_t()
 
@@ -113,7 +113,7 @@ public class MongoDatabase {
         return successful
     }
 
-    func createCollection(name: String, options: DocumentData) throws -> MongoCollection {
+    public func createCollection(name: String, options: DocumentData) throws -> MongoCollection {
 
         var error = bson_error_t()
 
@@ -144,7 +144,7 @@ public class MongoDatabase {
 //
 //    }
 
-    func findCollections(filter: DocumentData) throws -> MongoCursor {
+    public func findCollections(filter: DocumentData) throws -> MongoCursor {
 
         var error = bson_error_t()
         var filterRaw = try MongoBSON(data: filter).bson
@@ -158,7 +158,7 @@ public class MongoDatabase {
         return cursor
     }
 
-    func getCollection(_ name: String) -> MongoCollection {
+    public func getCollection(_ name: String) -> MongoCollection {
 
 
         let collectionRaw = mongoc_database_get_collection(databaseRaw, name)
@@ -168,7 +168,7 @@ public class MongoDatabase {
         return collection
     }
 
-    func getCollectionNames() throws -> [String] {
+    public func getCollectionNames() throws -> [String] {
 
         var error = bson_error_t()
 
@@ -187,7 +187,7 @@ public class MongoDatabase {
         return names
     }
 
-    func performBasicDatabaseCommand(_ command: DocumentData) throws -> DocumentData {
+    public func performBasicDatabaseCommand(_ command: DocumentData) throws -> DocumentData {
 
         var command = try MongoBSON(data: command).bson
 
