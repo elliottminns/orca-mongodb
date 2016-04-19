@@ -46,4 +46,8 @@ public class MongoDB {
 
         callback(error: error)
     }
+
+    public func disconnect() {
+        self.client = nil
+    }
 }
